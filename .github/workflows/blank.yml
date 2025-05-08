@@ -1,0 +1,39 @@
+name: Deploy 
+
+on: # Trigger on push to the main branch
+  push:
+   branches:
+    - dev_branch
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  deploy-adf:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Log in to Azure using service principal
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
+      # Deploy ADF pipelines and datasets
+      - name: Deploy ADF Resources
+        uses: Azure/data-factory-deploy-action@v1.2.0
+        with:
+          resourceGroupName: test  # Replace with your resource group name
+          dataFactoryName: ${{ secrets.DATAFACTORY_NAME }}  # ADF instance name from secret
+          path: .  # Root folder containing pipeline/ and dataset/ folders
+          detectDependancy: true  # Automatically handle dependencies
+          deleteNotInSource: true  # Remove resources not present in the source JSON files
+          armTemplateParametersFile: sampleadf568/ARMTemplateParametersForFactory.json
+          armTemplateFile: sampleadf568/ARMTemplateForFactory.json
+          # Optional: Specify environment-specific configuration
+          # additionalParameters: 'stage=deployment/config-prod.json'
+          # Optional: Skip Az module installation to speed up
+          # skipAzModuleInstallation: true
