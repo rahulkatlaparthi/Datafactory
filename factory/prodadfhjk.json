@@ -1,0 +1,9 @@
+{
+	"name": "prodadfhjk",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "bacad6e9-1330-4efb-9b97-9c6550c00794",
+		"tenantId": "b6dd09c7-5845-473b-a85b-9598c1e212c8"
+	}
+}
