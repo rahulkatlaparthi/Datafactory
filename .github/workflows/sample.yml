@@ -1,6 +1,9 @@
 name: Deploy Azure Data Factory Resources
 
 on: # Trigger on push to the main branch
+  push:
+   branches:
+    - test
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
