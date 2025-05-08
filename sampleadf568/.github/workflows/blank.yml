@@ -1,4 +1,4 @@
-name: Deploy Azure Data Factory Resources
+name: Deploy 
 
 on: # Trigger on push to the main branch
   push:
