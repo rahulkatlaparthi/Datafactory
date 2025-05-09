@@ -27,7 +27,7 @@ jobs:
         uses: Azure/data-factory-deploy-action@v1.2.0
         with:
           resourceGroupName: test  # Replace with your resource group name
-          dataFactoryName: ${{ secrets.DATAFACTORY_NAME }}  # ADF instance name from secret
+          dataFactoryName: sampletestuo8009  # ADF instance name from secret
           armTemplateParametersFile: sampleadf568/ARMTemplateParametersForFactory.json
           armTemplateFile: sampleadf568/ARMTemplateForFactory.json
           # Optional: Specify environment-specific configuration
