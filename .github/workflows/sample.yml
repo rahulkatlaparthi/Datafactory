@@ -27,10 +27,7 @@ jobs:
         uses: Azure/data-factory-deploy-action@v1.2.0
         with:
           resourceGroupName: test  # Replace with your resource group name
-          dataFactoryName: ${{ secrets.DATAFACTORY_NAME }}  # ADF instance name from secret
-          path: .  # Root folder containing pipeline/ and dataset/ folders
-          detectDependancy: true  # Automatically handle dependencies
-          deleteNotInSource: true  # Remove resources not present in the source JSON files
+          dataFactoryName: sampletestuo8009  # ADF instance name from secret
           armTemplateParametersFile: ARMTemplateParametersForFactory.json
           armTemplateFile: ARMTemplateForFactory.json
           # Optional: Specify environment-specific configuration
