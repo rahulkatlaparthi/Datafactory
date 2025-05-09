@@ -28,9 +28,6 @@ jobs:
         with:
           resourceGroupName: test  # Replace with your resource group name
           dataFactoryName: ${{ secrets.DATAFACTORY_NAME }}  # ADF instance name from secret
-          path: .  # Root folder containing pipeline/ and dataset/ folders
-          detectDependancy: true  # Automatically handle dependencies
-          deleteNotInSource: true  # Remove resources not present in the source JSON files
           armTemplateParametersFile: sampleadf568/ARMTemplateParametersForFactory.json
           armTemplateFile: sampleadf568/ARMTemplateForFactory.json
           # Optional: Specify environment-specific configuration
