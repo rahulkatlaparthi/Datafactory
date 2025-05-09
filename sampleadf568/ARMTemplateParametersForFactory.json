@@ -3,7 +3,7 @@
 	"contentVersion": "1.0.0.0",
 	"parameters": {
 		"factoryName": {
-			"value": "prodadfhjk"
+			"value": "sampletestuo8009"
 		},
 		"AzureBlobStorage1_properties_typeProperties_connectionString_secretName": {
 			"value": "accountkey"
