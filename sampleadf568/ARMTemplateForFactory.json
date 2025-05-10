@@ -1,60 +1,229 @@
 {
-	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-	"contentVersion": "1.0.0.0",
-	"parameters": {
-		"factoryName": {
-			"type": "string",
-			"metadata": "Data Factory name",
-			"defaultValue": "sampleadf568"
-		},
-		"AzureBlobStorage1_properties_typeProperties_connectionString_secretName": {
-			"type": "string",
-			"defaultValue": "accountkey"
-		},
-		"AzureKeyVault1_properties_typeProperties_baseUrl": {
-			"type": "string",
-			"defaultValue": "https://samplekv45.vault.azure.net/"
-		}
-	},
-	"variables": {
-		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
-	},
-	"resources": [
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": {
-						"type": "AzureKeyVaultSecret",
-						"store": {
-							"referenceName": "AzureKeyVault1",
-							"type": "LinkedServiceReference"
-						},
-						"secretName": "[parameters('AzureBlobStorage1_properties_typeProperties_connectionString_secretName')]",
-						"secretVersion": "74742bbbb94e4958a5a1ad09407ee475"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureKeyVault1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureKeyVault1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureKeyVault",
-				"typeProperties": {
-					"baseUrl": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
-				}
-			},
-			"dependsOn": []
-		}
-	]
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "type": "string",
+            "metadata": "Data Factory name",
+            "defaultValue": "sampleoneghkbvd"
+        },
+        "AzureBlobStorage1_properties_typeProperties_connectionString_secretName": {
+            "type": "string",
+            "defaultValue": "accountkey"
+        },
+        "AzureKeyVault1_properties_typeProperties_baseUrl": {
+            "type": "string",
+            "defaultValue": "https://samplekv45.vault.azure.net/"
+        }
+    },
+    "variables": {
+        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+    },
+    "resources": [
+        {
+            "name": "[concat(parameters('factoryName'), '/pipeline1')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "Copy data1",
+                        "type": "Copy",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "0.12:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "DelimitedTextSource",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageReadSettings",
+                                    "recursive": true,
+                                    "enablePartitionDiscovery": false
+                                },
+                                "formatSettings": {
+                                    "type": "DelimitedTextReadSettings"
+                                }
+                            },
+                            "sink": {
+                                "type": "DelimitedTextSink",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageWriteSettings"
+                                },
+                                "formatSettings": {
+                                    "type": "DelimitedTextWriteSettings",
+                                    "quoteAllText": true,
+                                    "fileExtension": ".txt"
+                                }
+                            },
+                            "enableStaging": false,
+                            "translator": {
+                                "type": "TabularTranslator",
+                                "typeConversion": true,
+                                "typeConversionSettings": {
+                                    "allowDataTruncation": true,
+                                    "treatBooleanAsNumber": false
+                                }
+                            }
+                        },
+                        "inputs": [
+                            {
+                                "referenceName": "DelimitedText1",
+                                "type": "DatasetReference",
+                                "parameters": {}
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "referenceName": "DelimitedText2",
+                                "type": "DatasetReference",
+                                "parameters": {}
+                            }
+                        ]
+                    }
+                ],
+                "policy": {
+                    "elapsedTimeMetric": {}
+                },
+                "annotations": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/datasets/DelimitedText1')]",
+                "[concat(variables('factoryId'), '/datasets/DelimitedText2')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureBlobStorage1",
+                    "type": "LinkedServiceReference"
+                },
+                "annotations": [],
+                "type": "DelimitedText",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "fileName": "sample.csv",
+                        "container": "input"
+                    },
+                    "columnDelimiter": ",",
+                    "escapeChar": "\\",
+                    "firstRowAsHeader": true,
+                    "quoteChar": "\""
+                },
+                "schema": [
+                    {
+                        "name": "PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z l9 .\u0000\u0000\u0000.\u0000\u0000\u0000\b\u0000\u0000\u0000mimetypeapplication/vnd.oasis.opendocument.spreadsheetPK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001a\u0000\u0000\u0000Configurations2/popupmenu/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0018\u0000\u0000\u0000Configurations2/menubar/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001c\u0000\u0000\u0000Configurations2/progressbar/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0018\u0000\u0000\u0000Configurations2/toolbar/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001a\u0000\u0000\u0000Configurations2/statusbar/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001f\u0000\u0000\u0000Configurations2/images/Bitmaps/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0018\u0000\u0000\u0000Configurations2/floater/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001a\u0000\u0000\u0000Configurations2/toolpanel/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001c\u0000\u0000\u0000Configurations2/accelerator/PK\u0003\u0004\u0014\u0000\b\b\b\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\f\u0000\u0000\u0000manifest.rdf͓ n 0\u0010  < e  @/\u0005\u0005r(ʹj  5 X\u0005/ \u0012޾  VQ     F3ߎ   a\u001cȋ   T4c)% Hh  +: .   : ض+\u001f \u001d j   * wn*9_  -7\flϳ (x  <O \"  8qH\fƴ \b\t\u001e Bi  |\u001a9  \tfWQt렐y  =  :   ",
+                        "type": "String"
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/DelimitedText2')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureBlobStorage1",
+                    "type": "LinkedServiceReference"
+                },
+                "annotations": [],
+                "type": "DelimitedText",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "container": "output"
+                    },
+                    "columnDelimiter": ",",
+                    "escapeChar": "\\",
+                    "firstRowAsHeader": true,
+                    "quoteChar": "\""
+                },
+                "schema": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/DelimitedText3')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureBlobStorage1",
+                    "type": "LinkedServiceReference"
+                },
+                "annotations": [],
+                "type": "DelimitedText",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "fileName": "sample.csv",
+                        "container": "input"
+                    },
+                    "columnDelimiter": ",",
+                    "escapeChar": "\\",
+                    "firstRowAsHeader": true,
+                    "quoteChar": "\""
+                },
+                "schema": [
+                    {
+                        "name": "PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z l9 .\u0000\u0000\u0000.\u0000\u0000\u0000\b\u0000\u0000\u0000mimetypeapplication/vnd.oasis.opendocument.spreadsheetPK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001a\u0000\u0000\u0000Configurations2/popupmenu/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0018\u0000\u0000\u0000Configurations2/menubar/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001c\u0000\u0000\u0000Configurations2/progressbar/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0018\u0000\u0000\u0000Configurations2/toolbar/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001a\u0000\u0000\u0000Configurations2/statusbar/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001f\u0000\u0000\u0000Configurations2/images/Bitmaps/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0018\u0000\u0000\u0000Configurations2/floater/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001a\u0000\u0000\u0000Configurations2/toolpanel/PK\u0003\u0004\u0014\u0000\u0000\b\u0000\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001c\u0000\u0000\u0000Configurations2/accelerator/PK\u0003\u0004\u0014\u0000\b\b\b\u0000\b? Z\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\f\u0000\u0000\u0000manifest.rdf͓ n 0\u0010  < e  @/\u0005\u0005r(ʹj  5 X\u0005/ \u0012޾  VQ     F3ߎ   a\u001cȋ   T4c)% Hh  +: .   : ض+\u001f \u001d j   * wn*9_  -7\flϳ (x  <O \"  8qH\fƴ \b\t\u001e Bi  |\u001a9  \tfWQt렐y  =  :   ",
+                        "type": "String"
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureBlobStorage",
+                "typeProperties": {
+                    "connectionString": {
+                        "type": "AzureKeyVaultSecret",
+                        "store": {
+                            "referenceName": "AzureKeyVault1",
+                            "type": "LinkedServiceReference"
+                        },
+                        "secretName": "[parameters('AzureBlobStorage1_properties_typeProperties_connectionString_secretName')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureKeyVault1')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/AzureKeyVault1')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureKeyVault",
+                "typeProperties": {
+                    "baseUrl": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
+                }
+            },
+            "dependsOn": []
+        }
+    ]
 }
