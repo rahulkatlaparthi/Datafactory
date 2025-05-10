@@ -1,0 +1,9 @@
+{
+	"name": "sampleoneghkbvd",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "22423314-a0f6-419b-8e47-19eb1c7f0982",
+		"tenantId": "b6dd09c7-5845-473b-a85b-9598c1e212c8"
+	}
+}
