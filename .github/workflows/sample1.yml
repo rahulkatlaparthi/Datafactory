@@ -1,0 +1,70 @@
+name: Deploy ADF Resources Separately
+
+on:
+  push:
+    branches:
+      - sampledevs
+
+
+jobs:
+  deploy-adf-resources:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
+
+    - name: Deploy AzureBlobStorage1 Linked Service
+      run: |
+        az datafactory linked-service create \
+          --resource-group "${{ secrets.RESOURCE_GROUP_NAME }}" \
+          --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
+          --linked-service-name "AzureBlobStorage1" \
+          --properties "@./linkedService/AzureBlobStorage1.json" || exit 1
+
+    - name: Deploy Keyvault Linked Service
+      run: |
+        az datafactory linked-service create \
+          --resource-group "${{ secrets.RESOURCE_GROUP_NAME }}" \
+          --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
+          --linked-service-name "Keyvault1" \
+          --properties "@./linkedService/AzureKeyVault1.json" || exit 1
+    
+    - name: Deploy DelimitedText1 Dataset
+      run: |
+        az datafactory dataset create \
+          --resource-group "${{ secrets.RESOURCE_GROUP_NAME }}" \
+          --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
+          --dataset-name "DelimitedText1" \
+          --properties "@./dataset/DelimitedText1.json" || exit 1
+          
+  - name: Deploy DelimitedText2 Dataset
+      run: |
+        az datafactory dataset create \
+          --resource-group "${{ secrets.RESOURCE_GROUP_NAME }}" \
+          --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
+          --dataset-name "DelimitedText2" \
+          --properties "@./dataset/DelimitedText2.json" || exit 1
+
+    - name: Deploy DelimitedText3 Dataset
+      run: |
+        az datafactory dataset create \
+          --resource-group "${{ secrets.RESOURCE_GROUP_NAME }}" \
+          --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
+          --dataset-name "DelimitedText3" \
+          --properties "@./dataset/DelimitedText3.json" || exit 1
+
+    - name: Deploy Pipeline1
+      run: |
+        az datafactory pipeline create \
+          --resource-group "${{ secrets.RESOURCE_GROUP_NAME }}" \
+          --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
+          --pipeline-name "Pipeline1" \
+          --pipeline "@./pipeline/Pipeline1.json" || exit 1
