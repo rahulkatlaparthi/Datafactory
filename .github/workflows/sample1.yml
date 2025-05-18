@@ -18,6 +18,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
+      - name: Debug AzureBlobStorage1 JSON
+        run: |
+          cat ./linkedService/AzureBlobStorage1.json
 
       - name: Deploy AzureBlobStorage1 Linked Service
         run: |
