@@ -20,7 +20,7 @@ jobs:
           enable-AzPSSession: true
       - name: Get absolute path of JSON file
         run: |
-          echo "Full Path: $(realpath linkedService/AzureKeyVault1.json)"
+          echo "Full Path: $(realpath pipeline/pipeline1.json)"
 
       - name: Deploy Keyvault Linked Service
         run: |
