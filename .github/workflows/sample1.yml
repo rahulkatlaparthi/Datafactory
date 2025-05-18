@@ -23,13 +23,13 @@ jobs:
           echo "Full Path: $(realpath linkedService/AzureKeyVault1.json)"
 
 
-      - name: Deploy AzureBlobStorage1 Linked Service
-        run: |
-          az datafactory linked-service create \
-            --resource-group "${{ secrets.RESOURCE_GROUP_NAME }}" \
-            --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
-            --linked-service-name "AzureBlobStorage1" \
-            --properties "@/home/runner/work/Datafactory/Datafactory/linkedService/AzureBlobStorage1.json" || exit 1
+      # - name: Deploy AzureBlobStorage1 Linked Service
+      #   run: |
+      #     az datafactory linked-service create \
+      #       --resource-group "${{ secrets.RESOURCE_GROUP_NAME }}" \
+      #       --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
+      #       --linked-service-name "AzureBlobStorage1" \
+      #       --properties "@/home/runner/work/Datafactory/Datafactory/linkedService/AzureBlobStorage1.json" || exit 1
             
       - name: Deploy Keyvault Linked Service
         run: |
