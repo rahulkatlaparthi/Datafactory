@@ -19,13 +19,13 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
 
-      - name: Deploy AzureBlobStorage1 Linked Service
-        run: |
-          az datafactory linked-service create \
-            --resource-group "${{ secrets.RESOURCE_GROUP_NAME }}" \
-            --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
-            --linked-service-name "AzureBlobStorage1" \
-            --properties "linkedService/AzureBlobStorage1.json" || exit 1
+      # - name: Deploy AzureBlobStorage1 Linked Service
+      #   run: |
+      #     az datafactory linked-service create \
+      #       --resource-group "${{ secrets.RESOURCE_GROUP_NAME }}" \
+      #       --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
+      #       --linked-service-name "AzureBlobStorage1" \
+      #       --properties "linkedService/AzureBlobStorage1.json" || exit 1
 
       - name: Deploy Keyvault Linked Service
         run: |
