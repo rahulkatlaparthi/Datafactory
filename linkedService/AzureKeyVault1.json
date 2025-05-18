@@ -1,11 +1,6 @@
 {
-    "name": "AzureKeyVault1",
-    "type": "Microsoft.DataFactory/factories/linkedservices",
-    "properties": {
-        "annotations": [],
-        "type": "AzureKeyVault",
-        "typeProperties": {
-            "baseUrl": "https://samplekv45.vault.azure.net/"
-        }
-    }
+  "type": "AzureKeyVault",
+  "typeProperties": {
+    "baseUrl": "https://samplekv45.vault.azure.net/"
+  }
 }
