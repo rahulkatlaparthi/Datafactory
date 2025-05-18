@@ -28,7 +28,7 @@ jobs:
             --resource-group "${{ secrets.RESOURCE_GROUP_NAME }}" \
             --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
             --linked-service-name "AzureBlobStorage1" \
-            --properties "@./linkedService/AzureBlobStorage1.json" || exit 1
+            --properties "linkedService/AzureBlobStorage1.json" || exit 1
 
       - name: Deploy Keyvault Linked Service
         run: |
