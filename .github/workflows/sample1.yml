@@ -75,4 +75,4 @@ jobs:
             --resource-group "${{ secrets.RESOURCE_GROUP_NAME }}" \
             --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
             --pipeline-name "Pipeline1" \
-            --pipeline "@./pipeline/Pipeline1.json" || exit 1
+            --pipeline "@/home/runner/work/Datafactory/Datafactory/pipeline/pipeline1.json" || exit 1
