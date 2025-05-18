@@ -1,4 +1,4 @@
-name: Deploy ADF Resources Separately
+name: Deploy ADF ResourcesSeparately
 
 on:
   push:
