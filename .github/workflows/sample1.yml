@@ -13,22 +13,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Update Azure CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y azure-cli
+
       - name: Login to Azure
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
-      - name: Debug AzureBlobStorage1 JSON
-        run: |
-          cat ./linkedService/AzureBlobStorage1.json
 
-      - name: Deploy AzureBlobStorage1 Linked Service
+      - name: Debug File Existence and JSON Validation
         run: |
-          az datafactory linked-service create \
-            --resource-group "${{ secrets.RESOURCE_GROUP_NAME }}" \
-            --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
-            --linked-service-name "AzureBlobStorage1" \
-            --properties "linkedService/AzureBlobStorage1.json" || exit 1
+          ls -la ./linkedService/
+          cat ./linkedService/AzureKeyVault1.json
+          jq . ./linkedService/AzureKeyVault1.json || { echo "Invalid JSON in AzureKeyVault1.json"; exit 1; }
+          cat ./linkedService/AzureBlobStorage1.json
+          jq . ./linkedService/AzureBlobStorage1.json || { echo "Invalid JSON in AzureBlobStorage1.json"; exit 1; }
 
       - name: Deploy Keyvault Linked Service
         run: |
@@ -37,6 +39,21 @@ jobs:
             --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
             --linked-service-name "Keyvault1" \
             --properties "@./linkedService/AzureKeyVault1.json" || exit 1
+
+      - name: Verify AzureKeyVault1 Linked Service
+        run: |
+          az datafactory linked-service show \
+            --resource-group "${{ secrets.RESOURCE_GROUP_NAME }}" \
+            --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
+            --linked-service-name "Keyvault1" || { echo "AzureKeyVault1 not found"; exit 1; }
+
+      - name: Deploy AzureBlobStorage1 Linked Service
+        run: |
+          az datafactory linked-service create \
+            --resource-group "${{ secrets.RESOURCE_GROUP_NAME }}" \
+            --factory-name "${{ secrets.DATA_FACTORY_NAME }}" \
+            --linked-service-name "AzureBlobStorage1" \
+            --properties "@./linkedService/AzureBlobStorage1.json" || exit 1
 
       - name: Deploy DelimitedText1 Dataset
         run: |
