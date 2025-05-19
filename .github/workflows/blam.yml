@@ -1,9 +1,9 @@
 name: Deploy 
 
 on: # Trigger on push to the main branch
-  # push:
-  #  branches:
-  #   - dev_branch
+  push:
+   branches:
+    - samplepub
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
@@ -34,8 +34,8 @@ jobs:
         uses: Azure/data-factory-deploy-action@v1.2.0
         with:
           resourceGroupName: test  # Replace with your resource group name
-          dataFactoryName: sampletestuo8009  # ADF instance name from secret
-          armTemplateParametersFile: sampleadf568/ARMTemplateParametersForFactory.json
+          dataFactoryName: sampleoneghkbvd  # ADF instance name from secret
+          armTemplateParametersFile: sampleadf568/Parameters/ARMTemplateParametersForFactory.json
           armTemplateFile: sampleadf568/ARMTemplateForFactory.json
           # Optional: Specify environment-specific configuration
           # additionalParameters: 'stage=deployment/config-prod.json'
